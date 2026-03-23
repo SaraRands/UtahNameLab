@@ -7,7 +7,7 @@
     <meta name="description" content="Generate uniquely Utah baby names with this data-driven name generator trained on real Social Security data." />
     <meta name="keywords" content="Utah baby names, name generator, unique baby names, Social Security data" />
     <title>
-      Utah Name Lab – A Unique Baby Name Generator Trained on Real Utah Data
+      Utah Name Generator – A Unique Baby Name Generator Trained on Real Utah Data
     </title>
     <link
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap"
@@ -166,8 +166,8 @@
   </head>
   <body>
     <header>
-      <h1>Utah Name Lab</h1>
-      <p class="subtitle">Generating Unique Utah Names</p>
+      <h1>Utah Name Generator</h1>
+      <p class="subtitle">New Names through Machine Learning</p>
     </header>
     <main>
       <section class="card">
@@ -373,9 +373,10 @@
       </section>
     </main>
     <footer>
-      <p>&copy;Sara Rands, 2025. All rights reserved.</p>
+      <p>&copy;Sara Rands, <span id="year"></span>. All rights reserved.</p>
     </footer>
-    <script>
+
+<script>
       const POOLS = {
         any: {
           items: [],
@@ -505,6 +506,7 @@
           elCount.value = 20;
         }
       });
+      document.getElementById("year").textContent = new Date().getFullYear();
       const DEMO = {
         names: [
           {
