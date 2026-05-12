@@ -6,31 +6,33 @@
     <meta name="google-site-verification" content="KasbVWEDX_RdTD0LLPo4sfhCTC7yq6bIChH8yMekjPA" />
     <meta name="description" content="Generate unique Utah baby names with a 4-gram machine-learning model trained on real Utah Social Security name data from 2000 to 2024." />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://sararands.com/utah-name-generator/" />
+    <link rel="canonical" href="https://utahnames.sararands.com/" />
 
     <title>Utah Name Generator | Unique Utah Baby Names from Real Data</title>
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Utah Name Generator" />
     <meta property="og:description" content="Generate unique Utah baby names with a 4-gram machine-learning model trained on real Utah Social Security name data from 2000 to 2024." />
-    <meta property="og:url" content="https://sararands.com/utah-name-generator/" />
+    <meta property="og:url" content="https://utahnames.sararands.com/" />
+    <meta property="og:image" content="https://utahnames.sararands.com/og-image.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Utah Name Generator" />
+    <meta name="twitter:image" content="https://utahnames.sararands.com/og-image.png" />
     <meta name="twitter:description" content="Generate unique Utah baby names with a 4-gram machine-learning model trained on real Utah Social Security name data from 2000 to 2024." />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "Utah Name Generator",
-      "url": "https://sararands.com/utah-name-generator/",
+      "url": "https://utahnames.sararands.com/",
       "description": "A machine-learning baby name generator trained on Utah baby names from 2000 to 2024.",
       "applicationCategory": "UtilityApplication",
       "operatingSystem": "Web",
       "creator": {
         "@type": "Person",
         "name": "Sara Rands",
-        "url": "https://sararands.com"
+        "url": "https://www.sararands.com"
       }
     }
     </script>
@@ -163,7 +165,20 @@
       a:hover {
         text-decoration: underline;
       }
+      input[type="range"] {
+        width: 100%;
+        max-width: 160px;
+        accent-color: var(--accent2);
+      }
 
+      .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        max-width: 160px;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
       /* FAQ block */
       details.faq-block summary {
         font-size: 20px;
@@ -229,6 +244,21 @@
               value="1"
             />
           </div>
+          <div>
+            <label for="utahdacity">Utahdacity</label>
+            <input
+              id="utahdacity"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.6"
+            />
+            <div class="slider-labels">
+              <small>Mild</small>
+              <small>Wild</small>
+            </div>
+          </div>
           <div style="align-self: end">
             <button id="go">Generate</button>
           </div>
@@ -276,6 +306,18 @@
               <strong>Do you recommend that?</strong>
             </p>
             <p>No, I do not.</p>
+            <hr />
+            <p>
+              <strong>What is Utahdacity?</strong>
+            </p>
+            <p>
+              Utahdacity (short for Utah-audacity) controls how wild the generated names get.
+              <br /><br />
+              On “Mild,” the generator sticks closer to the most statistically probable Utah-style names.
+              On “Wild,” it gets increasingly experimental, flattening the probabilities and allowing stranger combinations to emerge.
+              <br /><br />
+              In other words: more <em>Quinnifernicaelyn</em>, less <em>Sylivanna</em>; more <em>Garrentiago</em>, less <em>Becker</em>.
+            </p>
             <hr />
             <p>
               <strong>Why do some names sound . . . whackadoo?</strong>
@@ -444,7 +486,8 @@
         } catch {
           data = DEMO;
         }
-        indexData(data.names || []);
+        ALL_ROWS = data.names || [];
+        indexData(ALL_ROWS);
       }
 
       function indexData(rows) {
@@ -463,7 +506,9 @@
             sex,
           };
           const rawWeight = Number(r.w) || 1;
-          const weight = Math.pow(rawWeight, 0.4);
+          const utahdacity = parseFloat(elUtahdacity.value || "0.6");
+          const exponent = 1 - utahdacity;
+          const weight = Math.pow(rawWeight, exponent);
           POOLS.any.items.push(rec);
           POOLS.any.w.push(weight);
           if (sex !== "any") {
@@ -516,6 +561,8 @@
       const elList = document.getElementById("list");
       const elGender = document.getElementById("gender");
       const elCount = document.getElementById("count");
+      const elUtahdacity = document.getElementById("utahdacity");
+      let ALL_ROWS = [];
 
       function renderOne() {
         const g = elGender.value;
@@ -545,6 +592,9 @@
         } else if (val > 20) {
           elCount.value = 20;
         }
+      });
+      elUtahdacity.addEventListener("input", () => {
+        indexData(ALL_ROWS);
       });
       document.getElementById("year").textContent = new Date().getFullYear();
       const DEMO = {
